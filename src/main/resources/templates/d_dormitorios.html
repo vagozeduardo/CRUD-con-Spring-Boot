@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PriceTravel - Detalles de la Habitación</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos generales */
+        :root {
+            --primary-color: #064d2e;
+            --secondary-color: #2e8b57;
+            --background-color: rgba(0, 0, 0, 0.8);
+            --text-color: #e6ffe6;
+            --hover-color: #032a1a;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            --border-radius: 15px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-image: url('https://images.pexels.com/photos/30353517/pexels-photo-30353517/free-photo-of-serene-misty-coastal-landscape-at-sunrise.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            padding: 15px 20px;
+            color: var(--text-color);
+            font-size: 24px;
+            font-weight: bold;
+            width: 100%;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Navegación */
+        .nav {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Contenedor principal */
+        .room-container {
+            background: var(--background-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            max-width: 1000px;
+            width: 90%;
+            margin: 20px;
+            animation: fadeIn 1s ease-in-out;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sección de imágenes y mapa */
+        .room-images-map {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .room-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .room-images img {
+            width: 320px; /* Aumento solo el ancho */
+            height: 200px; /* Mantengo la altura constante */
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .room-images img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Contenedor del mapa */
+        .map-container {
+            position: relative;
+            width: 75%;
+            height: 420px; /* Aumento la altura del mapa */
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        /* Imagen del mapa */
+        .map-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+        }
+
+        /* Ícono de ubicación */
+        .location-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            color: red;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Detalles de la habitación */
+        .room-details {
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+
+        .room-details h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .room-details p {
+            font-size: 16px;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .room-details p i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 15px;
+        }
+
+        /* Descripción de la habitación */
+        .description {
+            margin-top: 15px;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Botón de reservar */
+        .reserve-button {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: 15px;
+            display: block;
+            width: 100%;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .reserve-button:hover {
+            background-color: var(--hover-color);
+            transform: scale(1.05);
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .room-images-map {
+                grid-template-columns: 1fr;
+            }
+            .nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .header {
+                flex-direction: column;
+                align-items: center;
+            }
+            .nav {
+                margin-top: 10px;
+            }
+            .map-container {
+                height: 300px;
+                width: 100%;
+            }
+            .map-image {
+                width: 100%;
+                height: auto;
+            }
+            .room-images img {
+                width: 100%;
+                height: 200px;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Detalles de la habitación</h1>
+        <!-- Navegación -->
+        <div class="nav">
+            <a href="#"><i class="fas fa-tags"></i> Ofertas</a>
+            <a href="#"><i class="fas fa-phone"></i> Teléfonos</a>
+            <a href="#"><i class="fab fa-whatsapp"></i> Whatsapp</a>
+            <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+        </div>
+    </div>
+
+    <!-- Contenedor principal -->
+    <div class="room-container">
+        <!-- Sección de imágenes y mapa -->
+        <div class="room-images-map">
+            <!-- Galería de imágenes -->
+            <div class="room-images">
+                <img src="https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Imagen 1">
+                <img src="https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Imagen 2">
+                <img src="https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Imagen 3">
+                <img src="https://images.pexels.com/photos/271619/pexels-photo-271619.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Imagen 4">
+            </div>
+
+            <!-- Contenedor del mapa con ícono de ubicación -->
+            <div class="map-container">
+                <img class="map-image" src="https://img.freepik.com/vector-gratis/ilustracion-redes-sociales_53876-17687.jpg?t=st=1741908944~exp=1741912544~hmac=f2d131c6591dc619f1ed62728189445514bda2b9789c88de0e02deb4f335f866&w=826" alt="Mapa de la ubicación">
+                <i class="fas fa-map-marker-alt location-icon"></i> <!-- Ícono de ubicación -->
+            </div>
+        </div>
+
+        <!-- Detalles de la habitación -->
+        <div class="room-details">
+        
+            <h2 id="Tituloh">Habitación en Calle Primera Oriente Comítan, Chiapas</h2>
+            <p id="propietarioh"><i class="fas fa-user"></i><strong>Propietario: </strong> <span id="nombrePropietario">~SIN DATOS~</span></p>
+            <p id="ubicacion texto"><i class="fas fa-map-marker-alt"></i><strong>Ubicación: </strong> <span id="ubicación_h">~SIN DATOS~</span></p>
+            <p class="price"><i class="fas fa-dollar-sign"></i><strong>Precio: </strong><span id="precioh">0</span></p>
+        </div>
+
+        <!-- Descripción de la habitación -->
+        <div class="description">
+            <h3>Descripción de la Habitación</h3>
+            <p> <span id="Descripcionh">habitación es perfecta para estudiantes o profesionales que buscan un lugar tranquilo y cómodo para vivir. Cuenta con todos los servicios incluidos, como Wi-Fi, aire acondicionado, y una excelente ubicación cerca de universidades y transporte público. Además, tiene una vista increíble y un ambiente acogedor.</span></p>
+        </div>
+
+        <!-- Botón de reservar -->
+        <a>
+            <button class="reserve-button" id="reservar"><i class="fas fa-calendar-check"></i> Reservar ahora</button>
+        </a>
+    </div>
+
+    <script src="/src/main/resources/static/js/dormitorio.js"></script>
+
+
+    <!-- 
+    <script>
+        // Interacción con las imágenes
+        document.querySelectorAll('.room-images img').forEach(img => {
+            img.addEventListener('click', () => {
+                alert(`Has seleccionado la imagen: ${img.alt}`);
+            });
+        });
+    </script>
+-->
+</body>
+</html>

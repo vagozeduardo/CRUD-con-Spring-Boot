@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Stay - Inicio de Sesión</title>
+    <style>
+        /* Estilo general */
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('https://images.pexels.com/photos/30353517/pexels-photo-30353517/free-photo-of-serene-misty-coastal-landscape-at-sunrise.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Filtro oscuro para el fondo */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+            z-index: -1;
+        }
+
+        /* Título principal mejorado */
+        .title {
+            font-size: 60px;
+            font-weight: bold;
+            color: #e6ffe6;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+            position: relative;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .title::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            bottom: -10px;
+            left: 0;
+            background: linear-gradient(90deg, #32a852, #0d7b3a);
+            border-radius: 10px;
+        }
+
+        /* Contenedor del login */
+        .login-container {
+            background: rgba(8, 106, 57, 0.9);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .login-container:hover {
+            transform: translateY(-10px);
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        /* Campos de entrada */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 90%;
+            padding: 15px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            font-size: 16px;
+            color: #e6ffe6;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(230, 255, 230, 0.7);
+        }
+
+        input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Botones */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #2e8b57, #21d06d);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .register-btn {
+            background: linear-gradient(90deg, #064d2e, #1d5b40);
+        }
+
+        .register-btn:hover {
+            background: linear-gradient(90deg, #032a1a, #0d3b24);
+        }
+
+        /* Mensaje de error */
+        #message {
+            color: #ff9999;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* Animación */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Student Stay</div>
+    <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+        <div class="input-group">
+            <input type="text" id="username" placeholder="Ingrese Correo" required>
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Ingrese Contraseña" required>
+        </div>
+        <div class="button-container">
+            <button id="BtnIniciar_Sesion">Ingresar</button>
+            <p class="register-text">¿No tienes cuenta?</p>
+            <button class="register-btn" id="boton_registro">Registrarme</button>
+        </div>
+        <p id="message_Sesion"></p>
+    </div>
+    <script src="/src/main/resources/static/js/a_index.js"></script>
+    <!-- Script para el login 
+    <script>
+        function login() {
+            var user = document.getElementById("username").value;
+            var pass = document.getElementById("password").value;
+
+            if (user === "admin" && pass === "1234") {
+                alert("Inicio de sesión exitoso");
+                window.location.href = "cuerpo.html";
+            } else {
+                document.getElementById("message").innerText = "Usuario o contraseña incorrectos";
+            }
+        }
+
+        function redirigirRegistro() {
+            window.location.href = "b_registro.html"; 
+        }
+    </script>
+    -->
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Pago</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('https://images.pexels.com/photos/30353517/pexels-photo-30353517/free-photo-of-serene-misty-coastal-landscape-at-sunrise.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Filtro oscuro para el fondo */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+            z-index: -1;
+        }
+
+        /* Contenedor del formulario */
+        .payment-container {
+            background: rgba(6, 77, 46, 0.9); /* Fondo verde semitransparente */
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Borde sutil */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #e6ffe6;
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: #e6ffe6; /* Línea divisoria blanca */
+            border-radius: 2px;
+        }
+
+        /* Grupos de entrada */
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .input-group:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .input-group i {
+            color: #e6ffe6;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        input {
+            flex: 1;
+            border: none;
+            border-radius: 10px;
+            background-color: transparent;
+            font-size: 16px;
+            color: #e6ffe6;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: rgba(230, 255, 230, 0.7);
+        }
+
+        input:focus {
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(46, 139, 87, 0.8);
+        }
+
+        /* Botón de pago */
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #2e8b57; /* Fondo verde */
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            background: #1d5b40; /* Verde más oscuro al hacer hover */
+            transform: scale(1.05);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mensaje de error o éxito */
+        .message {
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .message.success {
+            color: #21d06d; /* Verde de éxito */
+        }
+
+        .message.error {
+            color: #ff9999; /* Rojo de error */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Contenedor del formulario de pago -->
+    <div class="payment-container">
+        <h2>Formulario de Pago</h2>
+
+        <!-- Nombre completo -->
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="fullName" placeholder="Nombre completo" required maxlength="40" oninput="validateName()">
+        </div>
+
+        <!-- Correo electrónico -->
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="Correo electrónico" required>
+        </div>
+
+        <!-- Número de tarjeta -->
+        <div class="input-group">
+            <i class="fas fa-credit-card"></i>
+            <input type="text" id="cardNumber" placeholder="Número de tarjeta" required pattern="\d*" oninput="validateCardNumber()">
+        </div>
+
+        <!-- Fecha de expiración -->
+        <div class="input-group">
+            <i class="fas fa-calendar-alt"></i>
+            <input type="text" id="expiryDate" placeholder="MM/AAAA" required maxlength="7" oninput="validateExpiryDate()">
+        </div>
+
+        <!-- Código de seguridad (CVV) -->
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="number" id="cvv" placeholder="CVV" required maxlength="3" min="100" max="999" oninput="validateCVV()">
+        </div>
+
+        <!-- Botón de pago -->
+        <button onclick="processPayment()">Pagar</button>
+
+        <!-- Mensaje de error o éxito -->
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        // Validar que el campo Nombre Completo solo contenga letras y espacios
+        function validateName() {
+            const name = document.getElementById("fullName");
+            name.value = name.value.replace(/[^A-Za-zÁÉÍÓÚáéíóú ]+/g, '');
+        }
+
+        // Validar que el campo Número de Tarjeta solo contenga números
+        function validateCardNumber() {
+            const cardNumber = document.getElementById("cardNumber");
+            cardNumber.value = cardNumber.value.replace(/[^0-9]+/g, '');
+        }
+
+        // Validar que el campo CVV tenga solo 3 dígitos
+        function validateCVV() {
+            const cvv = document.getElementById("cvv");
+            cvv.value = cvv.value.replace(/[^0-9]+/g, ''); // Eliminar caracteres no numéricos
+            if (cvv.value.length > 3) {
+                cvv.value = cvv.value.slice(0, 3); // Limitar a 3 dígitos
+            }
+        }
+
+        // Validar la fecha de expiración en formato MM/AAAA
+        function validateExpiryDate() {
+            const expiryDate = document.getElementById("expiryDate");
+            let value = expiryDate.value;
+
+            // Eliminar caracteres no numéricos, excepto el '/'
+            value = value.replace(/[^0-9\/]/g, '');
+
+            // Asegurarse de que solo tenga el formato MM/AAAA
+            if (value.length > 5) {
+                value = value.slice(0, 5); // Limitar a 5 caracteres como máximo
+            }
+
+            // Agregar el '/' automáticamente entre mes y año
+            if (value.length === 2 && value.indexOf('/') === -1) {
+                value = value + '/';
+            }
+
+            expiryDate.value = value;
+        }
+
+        // Función para procesar el pago
+        function processPayment() {
+            var fullName = document.getElementById("fullName").value;
+            var email = document.getElementById("email").value;
+            var cardNumber = document.getElementById("cardNumber").value;
+            var expiryDate = document.getElementById("expiryDate").value;
+            var cvv = document.getElementById("cvv").value;
+
+            // Validación de que todos los campos han sido completados
+            if (fullName && email && cardNumber && expiryDate && cvv) {
+                // Mostrar mensaje de éxito
+                document.getElementById("message").innerText = "¡Pago realizado con éxito!";
+                document.getElementById("message").className = "success";
+                // Redirigir al usuario (puedes personalizar la redirección a otra página)
+                setTimeout(function() {
+                    window.location.href = "confirmation.html"; // Redirige a la página de confirmación
+                }, 1500);
+            } else {
+                // Mostrar mensaje de error si falta algún campo
+                document.getElementById("message").innerText = "Por favor, completa todos los campos.";
+                document.getElementById("message").className = "error"; // Error rojo
+            }
+        }
+    </script>
+
+</body>
+</html>

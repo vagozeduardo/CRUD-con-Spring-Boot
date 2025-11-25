@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda de Habitaciones</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background-image: url('https://images.pexels.com/photos/30353517/pexels-photo-30353517/free-photo-of-serene-misty-coastal-landscape-at-sunrise.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Panel lateral mejorado */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, rgba(6, 77, 46, 0.9), rgba(46, 139, 87, 0.9));
+            padding: 20px;
+            box-shadow: 0px 0px 20px rgba(46, 139, 87, 0.8);
+            display: flex;
+            flex-direction: column;
+            border-top-right-radius: 25px;
+            border-bottom-right-radius: 25px;
+            transition: width 0.3s ease-in-out;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+            /* Efecto de desenfoque */
+        }
+
+        .sidebar h2 {
+            color: #e6ffe6;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .sidebar h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #e6ffe6, #2e8b57);
+            border-radius: 2px;
+        }
+
+        .sidebar a {
+            color: #e6ffe6;
+            text-decoration: none;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+            transition: left 0.5s ease;
+        }
+
+        .sidebar a:hover::before {
+            left: 100%;
+        }
+
+        .sidebar a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding-left: 25px;
+            box-shadow: 0px 0px 15px rgba(46, 139, 87, 0.6);
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+            font-size: 20px;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar a:hover i {
+            transform: rotate(15deg);
+            color: #e6ffe6;
+        }
+
+        .sidebar a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #e6ffe6, #2e8b57);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Contenido principal */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 20px;
+            z-index: 1;
+            overflow-y: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Barra de navegación */
+        .navbar {
+            background: linear-gradient(90deg, #064d2e, #2e8b57);
+            padding: 20px;
+            color: #e6ffe6;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .navbar::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #e6ffe6, #2e8b57);
+        }
+
+        /* Barra de búsqueda */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .search-bar {
+            width: 60%;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 20px;
+            border: 2px solid #2E8B57;
+            background-color: rgba(249, 249, 249, 0.9);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            box-shadow: 0px 0px 8px rgba(46, 139, 87, 0.8);
+        }
+
+        .search-bar::placeholder {
+            color: #999;
+            transition: opacity 0.3s ease;
+        }
+
+        .search-bar:focus::placeholder {
+            opacity: 0;
+        }
+
+        .search-button {
+            padding: 14px 24px;
+            background-color: #2E8B57;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-button::before {
+            content: '🔍';
+            margin-right: 8px;
+        }
+
+        .search-button:hover {
+            background-color: #032a1a;
+            transform: scale(1.05);
+        }
+
+        /* Tarjetas de habitaciones */
+        .room-container {
+
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .room-card {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('ruta-de-la-imagen.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            padding: 25px 20px;
+            width: 260px;
+            height: 400px;
+            margin-bottom: 20px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        .room-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+
+        .room-card h3,
+        .room-card p,
+        .room-card .price {
+            position: relative;
+            z-index: 1;
+        }
+
+        .room-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #e6ffe6;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .room-card p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #e6ffe6;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .room-card .price {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #e6ffe6;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Botón de reservar mejorado */
+        .room-card .reservar-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #064d2e, #2e8b57);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .room-card .reservar-btn::before {
+            content: '📅';
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .room-card .reservar-btn:hover {
+            background: linear-gradient(135deg, #2e8b57, #064d2e);
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .room-card .reservar-btn:hover::before {
+            transform: rotate(360deg);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(90deg, #064d2e, #2e8b57);
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons {
+            margin-top: 10px;
+        }
+
+        .social-icons a {
+            color: #e6ffe6;
+            margin: 0 10px;
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Scroll personalizado */
+        .main-content {
+            scrollbar-width: thin;
+            scrollbar-color: #2e8b57 #064d2e;
+        }
+
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background-color: #2e8b57;
+            border-radius: 10px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background-color: #064d2e;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Panel lateral mejorado -->
+    <div class="sidebar">
+        <h2>Cuenta</h2>
+        <a href="a_index.html"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a>
+        <a href="b_registro.html" id="registrase"><i class="fas fa-user-plus"></i> Registrarme</a> <!-- Cambiado a "Registrarme" -->
+        <a href="#familiar"><i class="fas fa-star"></i> Más Rentadas</a>
+        <a href="#estudiantes"><i class="fas fa-thumbs-up"></i> Mejores calificadas</a>
+        <a href="#lujo"><i class="fas fa-comments"></i> Opiniones y Calificaciones</a>
+        <a href="#clasica"><i class="fas fa-file-alt"></i> Términos y Condiciones</a>
+        <a href="#deluxe"><i class="fas fa-question-circle"></i> Ayuda</a>
+        <a id="cerrarSesion" href="#"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        <div class="navbar">
+            Student Stay - Encuentra tu Habitación
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Buscar precio, ubicación, reservación, etc...">
+            <button class="search-button">Buscar</button>
+        </div>
+
+        <div class="room-container">
+            <!-- Tarjetas de habitaciones -->
+            <div class="room-card" id="premium" style="background-image: url('https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                <h3>Habitación Gutiérrez</h3>
+                <p>Disfruta de una excelente vista que te permitirá relajarte después de un día lleno de actividades. Cuenta con una cama king size para un descanso reparador, un baño completo con closet para guardar tus pertenencias y wifi gratuito para mantenerte conectado.</p>
+                <p class="price">$200 por noche</p>
+                <a href="d_dormitorios.html" class="reservar-btn">Reservar</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 Student Stay | Todos los derechos reservados | TECNM Comítan.</p>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/?locale=es_LA"><i class="fab fa-facebook"></i></a>
+                <a href="https://x.com/?lang=es"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+<!--
+        <div class="room-container">
+             Tarjetas de habitaciones
+            
+            <div class="room-container">
+                <div class="room-card" id="premium" style="background-image: url('https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                    <h3>Habitación Gutiérrez</h3>
+                    <p>Disfruta de una excelente vista que te permitirá relajarte después de un día lleno de actividades. Cuenta con una cama king size para un descanso reparador, un baño completo con closet para guardar tus pertenencias y wifi gratuito para mantenerte conectado.</p>
+                    <p class="price">$200 por noche</p>
+                    <a href="d_dormitorios.html" class="reservar-btn">Reservar</a>
+                </div>
+                <div class="room-card" id="economica" style="background-image: url('https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                    <h3>Habitación Hernández</h3>
+                    <p>Perfecta para estudiantes que buscan funcionalidad y precio accesible. Ofrece una cama individual cómoda, medio baño privado, una cocina completa para preparar tus comidas y wifi gratuito para tus tareas o entretenimiento.</p>
+                    <p class="price">$250 por noche</p>
+                    <a href="d_dormitorios.html" class="reservar-btn">Reservar</a>
+                </div>
+                <div class="room-card" id="vip" style="background-image: url('https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                    <h3>Habitación Pérez</h3>
+                    <p>Diseñada para quienes desean compartir su espacio. Cuenta con dos camas individuales, televisión con canales gratuitos, un baño completo y wifi de alta velocidad para estudiar o disfrutar de momentos de ocio.</p>
+                    <p class="price">$450 por noche</p>
+                    <a href="d_dormitorios.html" class="reservar-btn">Reservar</a>
+                </div>
+                <div class="room-card" id="familiar" style="background-image: url('https://images.pexels.com/photos/271619/pexels-photo-271619.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                    <h3>Habitación Juárez</h3>
+                    <p>Espaciosa y práctica para dos personas. Incluye televisión por cable para relajarte, wifi para tus necesidades académicas y suficiente espacio para una estancia cómoda.</p>
+                    <p class="price">$200 por noche</p>
+                    <a href="d_dormitorios.html" class="reservar-btn">Reservar</a>
+                </div>
+                <div class="room-card" id="estudiantes" style="background-image: url('https://images.pexels.com/photos/271643/pexels-photo-271643.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                    <h3>Habitación Salas</h3>
+                    <p>Ideal para estudiantes. Esta habitación incluye dos camas individuales, escritorios cómodos para proyectos académicos, un baño completo y wifi confiable para tus tareas y momentos de relajación.</p>
+                    <p class="price">$280 por noche</p>
+                    <a href="d_dormitorios.html" class="reservar-btn">Reservar</a>
+                </div>
+                <div class="room-card" id="lujo" style="background-image: url('https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                    <h3>Habitación Robles</h3>
+                    <p>Combina simplicidad y comodidad. Cuenta con una cama individual, baño completo y un medio baño adicional, además de wifi gratuito, perfecto para quienes buscan privacidad sin lujos excesivos.</p>
+                    <p class="price">$390 por noche</p>
+                    <a href="d_dormitorios.html" class="reservar-btn">Reservar</a>
+                </div>
+        </div>-->
+
+        <!-- Footer -->
+        
+    </div>
+    
+    <script src="/src/main/resources/static/js/cuerpo.js"></script>
+    <!-- <script th:src="@{/src/main/resources/static/js/cuerpo.js}" defer></script>-->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Verificar estado de sesión
+            const isLoggedIn = localStorage.getItem("isLoggedin") === "true";
+
+            // Mostrar u ocultar opciones
+            if (isLoggedIn) {
+                document.getElementById("registrase").style.display = "none";
+                document.getElementById("cerrarSesion").style.display = "block"; // Mostrar "Cerrar sesión"
+            } else {
+                
+                document.getElementById("cerrarSesion").style.display = "none"; // Ocultar "Cerrar sesión"
+            }
+        });
+    </script>
+</body>
+
+</html>
